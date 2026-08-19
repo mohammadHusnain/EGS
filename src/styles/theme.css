@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-app: #f4f7ff;
+  --bg-surface: #ffffff;
+  --bg-header: #1642c4;
+  --bg-nav: #0f2570;
+  --text-primary: #0a1a4d;
+  --text-secondary: #5b6b9a;
+  --text-inverse: #ffffff;
+  --accent-gold: #ffc107;
+  --border-color: #e3e9fb;
+  --card-shadow: 0 4px 14px rgba(10, 26, 77, 0.1);
+}
+
+.dark {
+  --bg-app: #060f2e;
+  --bg-surface: #0f1c45;
+  --bg-header: #0a1638;
+  --bg-nav: #081230;
+  --text-primary: #f2f5ff;
+  --text-secondary: #93a3d6;
+  --text-inverse: #ffffff;
+  --accent-gold: #ffd24d;
+  --border-color: #1c2a5c;
+  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 8px;
+}
+
+.themed-surface {
+  background-color: var(--bg-surface);
+  border-color: var(--border-color);
+}
+
+.themed-header {
+  background-color: var(--bg-header);
+}
+
+.themed-nav {
+  background-color: var(--bg-nav);
+}
+
+.text-app-primary { color: var(--text-primary); }
+.text-app-secondary { color: var(--text-secondary); }
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.22s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
