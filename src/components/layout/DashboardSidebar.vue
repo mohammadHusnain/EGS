@@ -67,7 +67,13 @@ const auth = useAuthStore()
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-  { id: 'casino-lobby', label: 'Casino Lobby', icon: 'slots', route: '/casino-lobby' },
+  { id: 'slots', label: 'Slots', icon: 'slots', route: '/slots' },
+  { id: 'blackjack', label: 'Blackjack', icon: 'crown', route: '/blackjack' },
+  { id: 'roulette', label: 'Roulette', icon: 'live', route: '/roulette' },
+  { id: 'game-shows', label: 'Game Shows', icon: 'fish', route: '/game-shows' },
+  { id: 'sportsbook', label: 'Sportsbook', icon: 'sports', route: '/sportsbook' },
+  { id: 'rewards', label: 'Rewards', icon: 'gift', route: '/rewards' },
+  { id: 'casino-lobby', label: 'Casino Lobby', icon: 'fire', route: '/casino-lobby' },
   { id: 'game-providers', label: 'Game Providers', icon: 'controller', route: '/game-providers' }
 ]
 

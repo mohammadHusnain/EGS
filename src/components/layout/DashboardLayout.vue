@@ -35,7 +35,7 @@
         </div>
       </header>
 
-      <main class="min-w-0 flex-1 overflow-y-auto pb-20 lg:pb-0">
+      <main ref="mainRef" class="min-w-0 flex-1 overflow-y-auto pb-20 lg:pb-0">
         <slot />
       </main>
     </div>
@@ -47,6 +47,7 @@ import { ref } from 'vue'
 import AppIcon from '../common/AppIcon.vue'
 import ThemeSwitcher from '../common/ThemeSwitcher.vue'
 import DashboardSidebar from './DashboardSidebar.vue'
+import { useLenis } from '@/composables/useLenis'
 
 defineProps({
   title: { type: String, default: 'Dashboard' }
@@ -54,4 +55,7 @@ defineProps({
 
 const collapsed = ref(false)
 const mobileOpen = ref(false)
+const mainRef = ref(null)
+
+useLenis(mainRef)
 </script>

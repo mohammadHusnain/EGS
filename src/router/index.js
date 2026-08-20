@@ -19,16 +19,46 @@ const routes = [
     meta: { title: 'Dashboard' }
   },
   {
+    path: '/slots',
+    name: 'Slots',
+    component: () => import('@/pages/Slots.vue'),
+    meta: { title: 'Slots' }
+  },
+  {
+    path: '/blackjack',
+    name: 'Blackjack',
+    component: () => import('@/pages/Blackjack.vue'),
+    meta: { title: 'Blackjack' }
+  },
+  {
+    path: '/roulette',
+    name: 'Roulette',
+    component: () => import('@/pages/Roulette.vue'),
+    meta: { title: 'Roulette' }
+  },
+  {
+    path: '/game-shows',
+    name: 'GameShows',
+    component: () => import('@/pages/GameShows.vue'),
+    meta: { title: 'Game Shows' }
+  },
+  {
+    path: '/sportsbook',
+    name: 'Sportsbook',
+    component: () => import('@/pages/Sportsbook.vue'),
+    meta: { title: 'Sportsbook' }
+  },
+  {
+    path: '/rewards',
+    name: 'Rewards',
+    component: () => import('@/pages/Rewards.vue'),
+    meta: { title: 'Rewards' }
+  },
+  {
     path: '/casino-lobby',
     name: 'CasinoLobby',
     component: () => import('@/pages/CasinoLobby.vue'),
     meta: { title: 'Casino Lobby' }
-  },
-  {
-    path: '/game-shows-check-temp',
-    name: 'GameShowsCheckTemp',
-    component: () => import('@/pages/GameShows.vue'),
-    meta: { title: 'Game Shows' }
   },
   {
     path: '/game-providers',
