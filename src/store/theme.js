@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useThemeStore = defineStore('theme', {
   state: () => ({
-    mode: localStorage.getItem('gp_theme') || 'light'
+    mode: localStorage.getItem('gp_theme') || 'dark'
   }),
   actions: {
     toggle() {

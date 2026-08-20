@@ -20,39 +20,24 @@
         </div>
       </div>
 
-      <!-- Template preview cards -->
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <!-- Quick links -->
+      <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <RouterLink
-          to="/casino-lobby"
+          v-for="link in quickLinks"
+          :key="link.to"
+          :to="link.to"
           class="group overflow-hidden rounded-2xl border themed-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
           :style="{ borderColor: 'var(--border-color)' }"
         >
-          <div class="relative flex h-40 items-center justify-center bg-gradient-to-br from-brand-blue-800 via-brand-blue-700 to-emerald-700 sm:h-48">
-            <span class="text-5xl">🎰</span>
-            <span class="absolute right-3 top-3 rounded-full bg-white/90 p-2 opacity-0 shadow transition-opacity group-hover:opacity-100">
-              <AppIcon name="chevronRight" :size="16" class="text-brand-blue-700" />
+          <div class="relative flex h-28 items-center justify-center sm:h-32" :class="link.gradient">
+            <span class="text-4xl">{{ link.emoji }}</span>
+            <span class="absolute right-2 top-2 rounded-full bg-black/30 p-1.5 opacity-0 shadow transition-opacity group-hover:opacity-100">
+              <AppIcon name="chevronRight" :size="14" class="text-white" />
             </span>
           </div>
-          <div class="p-4">
-            <p class="text-sm font-bold text-app-primary">Casino Lobby</p>
-            <p class="text-xs text-app-secondary">Category / game-grid homepage — Hot, Jackpot &amp; Slots sections.</p>
-          </div>
-        </RouterLink>
-
-        <RouterLink
-          to="/game-providers"
-          class="group overflow-hidden rounded-2xl border themed-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
-          :style="{ borderColor: 'var(--border-color)' }"
-        >
-          <div class="relative flex h-40 items-center justify-center bg-gradient-to-br from-indigo-800 via-brand-blue-700 to-purple-800 sm:h-48">
-            <span class="text-5xl">🃏</span>
-            <span class="absolute right-3 top-3 rounded-full bg-white/90 p-2 opacity-0 shadow transition-opacity group-hover:opacity-100">
-              <AppIcon name="chevronRight" :size="16" class="text-brand-blue-700" />
-            </span>
-          </div>
-          <div class="p-4">
-            <p class="text-sm font-bold text-app-primary">Game Providers</p>
-            <p class="text-xs text-app-secondary">Provider / category gaming homepage — sidebar navigation &amp; providers.</p>
+          <div class="p-3">
+            <p class="text-sm font-bold text-app-primary">{{ link.title }}</p>
+            <p class="text-xs text-app-secondary">{{ link.desc }}</p>
           </div>
         </RouterLink>
       </div>
@@ -83,6 +68,17 @@ const stats = [
   { label: 'Total Wagers', value: '$382K', change: '+8.9%', icon: 'crown' },
   { label: 'Live Games', value: '146', change: '+1.1%', icon: 'controller' },
   { label: 'Jackpots Won', value: '38', change: '+12%', icon: 'gift' }
+]
+
+const quickLinks = [
+  { to: '/slots', emoji: '🎰', title: 'Slots', desc: 'Sweet Rush Bonanza', gradient: 'bg-gradient-to-br from-brand-blue-800 via-brand-blue-700 to-emerald-700' },
+  { to: '/blackjack', emoji: '🃏', title: 'Blackjack', desc: 'Live dealer table', gradient: 'bg-gradient-to-br from-indigo-800 via-brand-blue-700 to-purple-800' },
+  { to: '/roulette', emoji: '🎡', title: 'Roulette', desc: 'American Roulette', gradient: 'bg-gradient-to-br from-red-800 via-brand-blue-800 to-brand-blue-900' },
+  { to: '/game-shows', emoji: '🐟', title: 'Game Shows', desc: 'Ice Fishing', gradient: 'bg-gradient-to-br from-cyan-800 via-brand-blue-700 to-brand-blue-900' },
+  { to: '/sportsbook', emoji: '🥊', title: 'Sportsbook', desc: 'Boxing odds', gradient: 'bg-gradient-to-br from-amber-800 via-brand-blue-800 to-brand-blue-900' },
+  { to: '/rewards', emoji: '🏆', title: 'Rewards', desc: 'VIP rank progress', gradient: 'bg-gradient-to-br from-brand-gold-600 via-brand-blue-800 to-brand-blue-900' },
+  { to: '/casino-lobby', emoji: '🏠', title: 'Casino Lobby', desc: 'Hot, Jackpot & Slots', gradient: 'bg-gradient-to-br from-brand-blue-800 via-brand-blue-700 to-emerald-700' },
+  { to: '/game-providers', emoji: '🕹️', title: 'Game Providers', desc: 'Providers & categories', gradient: 'bg-gradient-to-br from-indigo-800 via-brand-blue-700 to-purple-800' }
 ]
 
 const activity = [
