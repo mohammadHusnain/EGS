@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25"
+    class="flex h-9 w-9 items-center justify-center rounded-full text-app-primary transition hover:bg-black/10 dark:hover:bg-white/15"
     :aria-label="theme.mode === 'light' ? 'Switch to dark theme' : 'Switch to light theme'"
     @click="theme.toggle()"
   >
