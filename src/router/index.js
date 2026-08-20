@@ -25,6 +25,12 @@ const routes = [
     meta: { title: 'Casino Lobby' }
   },
   {
+    path: '/game-shows-check-temp',
+    name: 'GameShowsCheckTemp',
+    component: () => import('@/pages/GameShows.vue'),
+    meta: { title: 'Game Shows' }
+  },
+  {
     path: '/game-providers',
     name: 'GameProviders',
     component: () => import('@/pages/GameProviders.vue'),
