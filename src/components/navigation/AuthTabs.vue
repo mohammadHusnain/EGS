@@ -3,7 +3,7 @@
     <button
       type="button"
       class="text-sm font-semibold transition"
-      :class="active === 'login' ? 'text-brand-blue-600' : 'text-app-secondary hover:text-app-primary'"
+      :class="active === 'login' ? 'text-brand-blue-600 dark:text-brand-blue-300' : 'text-app-secondary hover:text-app-primary'"
       @click="$emit('update:active', 'login')"
     >
       Login
@@ -12,7 +12,7 @@
     <button
       type="button"
       class="text-sm font-semibold transition"
-      :class="active === 'register' ? 'text-emerald-500' : 'text-app-secondary hover:text-app-primary'"
+      :class="active === 'register' ? 'text-emerald-500 dark:text-emerald-400' : 'text-app-secondary hover:text-app-primary'"
       @click="$emit('update:active', 'register')"
     >
       Register
