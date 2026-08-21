@@ -51,9 +51,9 @@
         </div>
 
         <!-- Game details -->
-        <div class="flex flex-col gap-4 p-4 lg:flex-row">
+        <div class="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[0.85fr_1.6fr]">
           <!-- Info card -->
-          <div class="flex w-full shrink-0 flex-col gap-3 lg:w-56">
+          <div class="glass-card flex w-full shrink-0 flex-col gap-3 p-3">
             <div class="group relative aspect-[3/4] w-full overflow-hidden rounded-xl">
               <img :src="gameThumb" alt="Blackjack table art" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
               <div class="absolute inset-0 bg-gradient-to-t from-brand-blue-950/90 via-brand-blue-900/10 to-transparent" />
@@ -79,7 +79,7 @@
           </div>
 
           <!-- Live dealer viewport -->
-          <div class="relative min-h-[280px] flex-1 overflow-hidden rounded-xl bg-black sm:min-h-[360px]">
+          <div class="glass-card relative min-h-[280px] w-full overflow-hidden bg-black p-0 sm:min-h-[360px]">
             <img :src="dealerTable" alt="Live blackjack dealer table" class="absolute inset-0 h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/5 to-black/30" />
 
@@ -138,7 +138,7 @@
 
                 <button
                   type="button"
-                  class="deal-btn rounded-full bg-brand-gold-500 px-5 py-2 text-xs font-bold text-brand-blue-950 shadow-lg transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+                  class="deal-btn btn-glossy px-5 py-2 text-xs font-bold sm:text-sm"
                   :disabled="betAmount === 0"
                   :class="{ 'is-dealing': dealing }"
                   @click="deal"

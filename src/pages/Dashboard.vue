@@ -6,8 +6,7 @@
         <div
           v-for="stat in stats"
           :key="stat.label"
-          class="rounded-2xl border themed-surface p-4 shadow-sm sm:p-5"
-          :style="{ borderColor: 'var(--border-color)' }"
+          class="glass-card p-4 sm:p-5"
         >
           <div class="flex items-center justify-between">
             <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue-700 dark:bg-white/10 dark:text-brand-gold-400">
@@ -20,26 +19,87 @@
         </div>
       </div>
 
-      <!-- Quick links -->
-      <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-        <RouterLink
-          v-for="link in quickLinks"
-          :key="link.to"
-          :to="link.to"
-          class="group overflow-hidden rounded-2xl border themed-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
-          :style="{ borderColor: 'var(--border-color)' }"
-        >
-          <div class="relative flex h-28 items-center justify-center sm:h-32" :class="link.gradient">
-            <span class="text-4xl">{{ link.emoji }}</span>
-            <span class="absolute right-2 top-2 rounded-full bg-black/30 p-1.5 opacity-0 shadow transition-opacity group-hover:opacity-100">
-              <AppIcon name="chevronRight" :size="14" class="text-white" />
-            </span>
+      <!-- Jackpots -->
+      <div>
+        <div class="mb-3 flex items-end justify-between">
+          <div>
+            <h2 class="text-base font-bold text-app-primary sm:text-lg">Jackpots</h2>
+            <p class="text-xs text-app-secondary">Live progressive pools — climbing every second</p>
           </div>
-          <div class="p-3">
-            <p class="text-sm font-bold text-app-primary">{{ link.title }}</p>
-            <p class="text-xs text-app-secondary">{{ link.desc }}</p>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="jp in jackpots"
+            :key="jp.id"
+            class="group relative overflow-hidden rounded-2xl border p-5 shadow-sm"
+            :style="{ borderColor: 'var(--border-color)', background: jp.glow }"
+          >
+            <img
+              :src="jp.image"
+              :alt="jp.title"
+              class="pointer-events-none absolute -right-4 bottom-0 h-40 w-40 object-contain opacity-90 drop-shadow-2xl transition-transform duration-300 group-hover:scale-105 sm:h-48 sm:w-48"
+            />
+            <div class="relative z-10 max-w-[70%]">
+              <span class="inline-flex items-center rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-brand-gold-300">
+                {{ jp.badge }}
+              </span>
+              <p class="mt-3 text-xs font-semibold text-white/70">{{ jp.provider }}</p>
+              <p class="text-lg font-black text-white">{{ jp.title }}</p>
+              <p class="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/50">Progressive Jackpot</p>
+              <p class="mt-2 text-2xl font-black text-brand-gold-300 sm:text-3xl">{{ jp.amount }}</p>
+              <p class="mt-1 text-xs font-bold text-emerald-400">{{ jp.trend }}</p>
+              <RouterLink
+                :to="jp.to"
+                class="mt-4 inline-flex items-center gap-1.5 rounded-full bg-brand-gold-500 px-4 py-2 text-xs font-bold text-brand-blue-950 shadow transition hover:bg-brand-gold-400"
+              >
+                Play Now
+                <AppIcon name="chevronRight" :size="13" />
+              </RouterLink>
+            </div>
           </div>
-        </RouterLink>
+        </div>
+      </div>
+
+      <!-- Popular games -->
+      <div>
+        <div class="mb-3 flex items-end justify-between">
+          <div>
+            <h2 class="text-base font-bold text-app-primary sm:text-lg">Popular Games</h2>
+            <p class="text-xs text-app-secondary">Top picks this week</p>
+          </div>
+          <RouterLink to="/casino-lobby" class="text-xs font-bold text-brand-blue-600 hover:underline dark:text-brand-gold-400">
+            View All →
+          </RouterLink>
+        </div>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+          <div
+            v-for="game in popularGames"
+            :key="game.key"
+            class="group relative overflow-hidden rounded-2xl border themed-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+            :style="{ borderColor: 'var(--border-color)' }"
+          >
+            <div class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br sm:h-36" :class="game.gradient">
+              <img :src="game.image" :alt="game.title" class="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" />
+              <span
+                class="absolute left-2 top-2 rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-white shadow"
+                :class="game.badgeClass"
+              >
+                {{ game.badge }}
+              </span>
+              <button
+                type="button"
+                class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white opacity-0 shadow transition-opacity group-hover:opacity-100"
+                aria-label="Add to favorites"
+              >
+                <AppIcon name="gift" :size="13" />
+              </button>
+            </div>
+            <div class="p-3">
+              <p class="truncate text-sm font-bold text-app-primary">{{ game.title }}</p>
+              <p class="text-xs text-app-secondary">{{ game.provider }}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Recent activity -->
@@ -62,6 +122,7 @@
 <script setup>
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
 import AppIcon from '@/components/common/AppIcon.vue'
+import { hotGames, jackpotGames, slotGames, providers } from '@/data/games'
 
 const stats = [
   { label: 'Active Players', value: '12,480', change: '+4.2%', icon: 'user' },
@@ -70,16 +131,64 @@ const stats = [
   { label: 'Jackpots Won', value: '38', change: '+12%', icon: 'gift' }
 ]
 
-const quickLinks = [
-  { to: '/slots', emoji: '🎰', title: 'Slots', desc: 'Sweet Rush Bonanza', gradient: 'bg-gradient-to-br from-brand-blue-800 via-brand-blue-700 to-emerald-700' },
-  { to: '/blackjack', emoji: '🃏', title: 'Blackjack', desc: 'Live dealer table', gradient: 'bg-gradient-to-br from-indigo-800 via-brand-blue-700 to-purple-800' },
-  { to: '/roulette', emoji: '🎡', title: 'Roulette', desc: 'American Roulette', gradient: 'bg-gradient-to-br from-red-800 via-brand-blue-800 to-brand-blue-900' },
-  { to: '/game-shows', emoji: '🐟', title: 'Game Shows', desc: 'Ice Fishing', gradient: 'bg-gradient-to-br from-cyan-800 via-brand-blue-700 to-brand-blue-900' },
-  { to: '/sportsbook', emoji: '🥊', title: 'Sportsbook', desc: 'Boxing odds', gradient: 'bg-gradient-to-br from-amber-800 via-brand-blue-800 to-brand-blue-900' },
-  { to: '/rewards', emoji: '🏆', title: 'Rewards', desc: 'VIP rank progress', gradient: 'bg-gradient-to-br from-brand-gold-600 via-brand-blue-800 to-brand-blue-900' },
-  { to: '/casino-lobby', emoji: '🏠', title: 'Casino Lobby', desc: 'Hot, Jackpot & Slots', gradient: 'bg-gradient-to-br from-brand-blue-800 via-brand-blue-700 to-emerald-700' },
-  { to: '/game-providers', emoji: '🕹️', title: 'Game Providers', desc: 'Providers & categories', gradient: 'bg-gradient-to-br from-indigo-800 via-brand-blue-700 to-purple-800' }
+// Jackpot hero cards — real game art from src/assets/games, no placeholders.
+const jackpots = [
+  {
+    id: 'golden-empire',
+    image: hotGames[1].image,
+    badge: 'JILI JACKPOT',
+    provider: 'JILI GAMES',
+    title: 'Golden Empire',
+    amount: '$284,912.50',
+    trend: '+$3.40/sec avg',
+    to: '/slots',
+    glow: 'radial-gradient(circle at 80% 30%, rgba(245,158,11,0.35), transparent 60%), var(--surface-alt, #14213a)'
+  },
+  {
+    id: 'fortune-gems',
+    image: hotGames[2].image,
+    badge: 'FTG JACKPOT',
+    provider: 'FTG GAMES',
+    title: 'Fortune Gems',
+    amount: '$156,340.20',
+    trend: '+$1.85/sec avg',
+    to: '/slots',
+    glow: 'radial-gradient(circle at 80% 30%, rgba(168,85,247,0.35), transparent 60%), var(--surface-alt, #14213a)'
+  },
+  {
+    id: 'super-ace',
+    image: hotGames[0].image,
+    badge: 'QG JACKPOT',
+    provider: 'QORA GAMES',
+    title: 'Super Ace',
+    amount: '$97,205.75',
+    trend: '+$0.92/sec avg',
+    to: '/slots',
+    glow: 'radial-gradient(circle at 80% 30%, rgba(16,185,129,0.35), transparent 60%), var(--surface-alt, #14213a)'
+  }
 ]
+
+const badgeVariants = [
+  { badge: 'HOT', badgeClass: 'bg-red-600' },
+  { badge: 'JACKPOT', badgeClass: 'bg-brand-gold-500 !text-brand-blue-950' },
+  { badge: 'NEW', badgeClass: 'bg-emerald-600' }
+]
+
+const rawPopularGames = [
+  ...jackpotGames,
+  ...hotGames,
+  ...slotGames,
+  ...providers
+]
+
+const popularGames = rawPopularGames.map((game, i) => ({
+  key: `${game.id}-${i}`,
+  title: game.title,
+  image: game.image,
+  gradient: game.gradient,
+  provider: game.name || 'EGS Gaming',
+  ...badgeVariants[i % badgeVariants.length]
+}))
 
 const activity = [
   { id: 1, icon: 'crown', text: 'Player won Golden Empire jackpot', time: '2m ago' },

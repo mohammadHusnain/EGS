@@ -64,9 +64,9 @@
       </div>
 
       <!-- Game info + live table -->
-      <div class="themed-surface flex flex-col gap-4 rounded-xl border p-3 sm:p-4 lg:flex-row" :style="{ borderColor: 'var(--border-color)' }">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[0.75fr_1.7fr]">
         <!-- Game info card -->
-        <div class="flex w-full flex-shrink-0 flex-col gap-3 lg:w-56">
+        <div class="glass-card flex w-full flex-shrink-0 flex-col gap-3 p-3">
           <div class="relative aspect-[4/5] w-full overflow-hidden rounded-xl">
             <img :src="gameThumb" alt="American Roulette table" class="absolute inset-0 h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-blue-500/85" />
@@ -90,7 +90,7 @@
         </div>
 
         <!-- Live table -->
-        <div class="flex min-w-0 flex-1 flex-col gap-3">
+        <div class="glass-card flex min-w-0 w-full flex-col gap-3 p-3 sm:p-4">
           <div class="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-card">
             <img :src="tableLive" alt="Live American Roulette table" class="absolute inset-0 h-full w-full object-cover" />
             <div class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur-sm">
@@ -130,7 +130,7 @@
               <button type="button" class="rounded-lg px-3 py-1.5 text-xs font-semibold text-app-secondary transition hover:bg-black/5" @click="clearBets">
                 Clear
               </button>
-              <button type="button" class="rounded-lg bg-brand-blue-600 px-4 py-1.5 text-xs font-semibold text-white shadow transition hover:brightness-110 active:scale-95">
+              <button type="button" class="btn-glossy-blue px-4 py-1.5 text-xs font-semibold">
                 Bet ${{ selectedChip }}
               </button>
             </div>

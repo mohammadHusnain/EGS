@@ -61,9 +61,9 @@
       </div>
 
       <!-- Game Details + Reel -->
-      <div class="themed-surface flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:p-4" :style="{ borderColor: 'var(--border-color)' }">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[0.85fr_0.85fr_1.3fr]">
         <!-- Game Info Panel -->
-        <div class="flex w-full flex-col gap-3 rounded-lg bg-[color:var(--bg-app)] p-2 sm:w-56 sm:shrink-0">
+        <div class="glass-card flex w-full flex-col gap-3 p-3">
           <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
             <img :src="sweetRushCard" :alt="game.title" class="absolute inset-0 h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
@@ -86,70 +86,70 @@
               <span class="font-medium text-app-primary">{{ game.rtp }}</span>
             </div>
           </div>
+        </div>
 
-          <!-- Betting controls -->
-          <div class="space-y-2 rounded-lg bg-black/5 p-2.5 dark:bg-white/5">
-            <div class="flex items-center justify-between text-[11px] text-app-secondary">
-              <span>Balance</span>
-              <span class="font-semibold text-app-primary">${{ balance.toFixed(2) }}</span>
-            </div>
+        <!-- Betting controls -->
+        <div class="glass-card flex w-full flex-col justify-center gap-2.5 p-3.5">
+          <div class="flex items-center justify-between text-[11px] text-app-secondary">
+            <span>Balance</span>
+            <span class="font-semibold text-app-primary">${{ balance.toFixed(2) }}</span>
+          </div>
 
-            <div>
-              <p class="mb-1 text-[11px] text-app-secondary">Bet Amount</p>
-              <div class="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md themed-surface border text-app-primary transition hover:bg-black/5 disabled:opacity-40"
-                  :style="{ borderColor: 'var(--border-color)' }"
-                  :disabled="betAmount <= betStep || isSpinning"
-                  @click="betAmount = Math.max(betStep, +(betAmount - betStep).toFixed(2))"
-                >
-                  <SlotsIcon name="minus" :size="12" />
-                </button>
-                <div class="flex h-7 flex-1 items-center justify-center rounded-md themed-surface border text-xs font-bold text-app-primary" :style="{ borderColor: 'var(--border-color)' }">
-                  ${{ betAmount.toFixed(2) }}
-                </div>
-                <button
-                  type="button"
-                  class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md themed-surface border text-app-primary transition hover:bg-black/5 disabled:opacity-40"
-                  :style="{ borderColor: 'var(--border-color)' }"
-                  :disabled="isSpinning"
-                  @click="betAmount = +(betAmount + betStep).toFixed(2)"
-                >
-                  <SlotsIcon name="plus" :size="12" />
-                </button>
+          <div>
+            <p class="mb-1 text-[11px] text-app-secondary">Bet Amount</p>
+            <div class="flex items-center gap-1.5">
+              <button
+                type="button"
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md themed-surface border text-app-primary transition hover:bg-black/5 disabled:opacity-40"
+                :style="{ borderColor: 'var(--border-color)' }"
+                :disabled="betAmount <= betStep || isSpinning"
+                @click="betAmount = Math.max(betStep, +(betAmount - betStep).toFixed(2))"
+              >
+                <SlotsIcon name="minus" :size="12" />
+              </button>
+              <div class="flex h-7 flex-1 items-center justify-center rounded-md themed-surface border text-xs font-bold text-app-primary" :style="{ borderColor: 'var(--border-color)' }">
+                ${{ betAmount.toFixed(2) }}
               </div>
+              <button
+                type="button"
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md themed-surface border text-app-primary transition hover:bg-black/5 disabled:opacity-40"
+                :style="{ borderColor: 'var(--border-color)' }"
+                :disabled="isSpinning"
+                @click="betAmount = +(betAmount + betStep).toFixed(2)"
+              >
+                <SlotsIcon name="plus" :size="12" />
+              </button>
             </div>
+          </div>
 
-            <div class="flex items-center gap-1.5 pt-1">
-              <button
-                type="button"
-                class="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg text-xs font-semibold transition"
-                :class="autoplay ? 'bg-brand-gold-500 text-black' : 'themed-surface border text-app-primary hover:bg-black/5'"
-                :style="!autoplay ? { borderColor: 'var(--border-color)' } : {}"
-                @click="autoplay = !autoplay"
-              >
-                <SlotsIcon name="autoplay" :size="13" />
-                Auto
-              </button>
-              <button
-                type="button"
-                class="spin-btn relative flex h-9 flex-[1.4] items-center justify-center gap-1.5 rounded-lg bg-gradient-to-b from-brand-gold-400 to-brand-gold-600 text-xs font-bold text-black shadow-md transition active:scale-95 disabled:opacity-60"
-                :disabled="isSpinning || betAmount > balance"
-                @click="spin"
-              >
-                <SlotsIcon name="spin" :size="14" :class="{ 'animate-spin': isSpinning }" />
-                {{ isSpinning ? 'Spinning…' : 'Spin' }}
-              </button>
-            </div>
+          <div class="flex items-center gap-1.5 pt-1">
+            <button
+              type="button"
+              class="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg text-xs font-semibold transition"
+              :class="autoplay ? 'bg-brand-gold-500 text-black' : 'themed-surface border text-app-primary hover:bg-black/5'"
+              :style="!autoplay ? { borderColor: 'var(--border-color)' } : {}"
+              @click="autoplay = !autoplay"
+            >
+              <SlotsIcon name="autoplay" :size="13" />
+              Auto
+            </button>
+            <button
+              type="button"
+              class="btn-glossy relative flex h-9 flex-[1.4] items-center justify-center gap-1.5 text-xs font-bold"
+              :disabled="isSpinning || betAmount > balance"
+              @click="spin"
+            >
+              <SlotsIcon name="spin" :size="14" :class="{ 'animate-spin': isSpinning }" />
+              {{ isSpinning ? 'Spinning…' : 'Spin' }}
+            </button>
           </div>
         </div>
 
         <!-- Reel Area -->
-        <div class="relative w-full flex-1 overflow-hidden rounded-lg">
-          <div class="relative aspect-[16/10] w-full sm:aspect-auto sm:h-[288px]">
-            <img :src="sweetRushReel" alt="Sweet Rush Bonanza reel" class="absolute inset-0 h-full w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+        <div class="glass-card relative w-full overflow-hidden p-0">
+          <div class="relative aspect-[16/10] w-full sm:aspect-auto sm:h-full sm:min-h-[288px]">
+            <img :src="sweetRushReel" alt="Sweet Rush Bonanza reel" class="absolute inset-0 h-full w-full rounded-2xl object-cover" />
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/40 via-transparent to-black/10" />
 
             <!-- Win pulse overlay -->
             <transition name="win-pop">

@@ -49,9 +49,9 @@
       </div>
 
       <!-- Game info + live feed -->
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr]">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[0.8fr_1.6fr]">
         <!-- Left game info card -->
-        <div class="themed-surface flex flex-col gap-3 rounded-xl border p-3" :style="{ borderColor: 'var(--border-color)' }">
+        <div class="glass-card flex flex-col gap-3 p-3">
           <div class="relative flex aspect-[3/4] w-full flex-col items-center justify-end overflow-hidden rounded-lg">
             <img :src="cardImage" alt="Ice Fishing game card" class="absolute inset-0 h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-brand-blue-950/85 via-brand-blue-900/10 to-transparent" />
@@ -75,7 +75,7 @@
         </div>
 
         <!-- Live feed -->
-        <div class="relative overflow-hidden rounded-xl" :style="{ backgroundColor: 'var(--bg-nav)' }">
+        <div class="glass-card relative overflow-hidden p-0" :style="{ backgroundColor: 'var(--bg-nav)' }">
           <img :src="liveFeedImage" alt="Live dealer feed" class="h-full max-h-[280px] w-full object-cover opacity-90" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
@@ -95,14 +95,17 @@
       </div>
 
       <!-- Wheel + betting panel -->
-      <div class="themed-surface flex flex-col items-center gap-5 rounded-xl border p-4 sm:p-6" :style="{ borderColor: 'var(--border-color)' }">
-        <PrizeWheel :segments="wheelSegments" :spinning="spinning" :target-rotation="targetRotation" :size="260" class="my-2" />
+      <div class="glass-card grid grid-cols-1 items-center gap-6 p-4 sm:p-6 lg:grid-cols-3">
+        <!-- Wheel -->
+        <div class="flex flex-col items-center gap-3 lg:items-start">
+          <PrizeWheel :segments="wheelSegments" :spinning="spinning" :target-rotation="targetRotation" :size="260" class="my-2" />
 
-        <transition name="fade-slide">
-          <div v-if="lastResult" class="rounded-lg bg-brand-gold-500/15 px-4 py-1.5 text-sm font-bold text-brand-gold-600">
-            Landed on {{ lastResult }} &mdash; nice one!
-          </div>
-        </transition>
+          <transition name="fade-slide">
+            <div v-if="lastResult" class="rounded-lg bg-brand-gold-500/15 px-4 py-1.5 text-sm font-bold text-brand-gold-600">
+              Landed on {{ lastResult }} &mdash; nice one!
+            </div>
+          </transition>
+        </div>
 
         <!-- Chip selector -->
         <div class="flex flex-wrap items-center justify-center gap-2">
@@ -123,14 +126,14 @@
         </div>
 
         <!-- Bet + spin controls -->
-        <div class="flex w-full max-w-md flex-wrap items-center justify-center gap-3">
-          <div class="flex flex-1 items-center justify-between gap-3 rounded-lg px-3 py-2" :style="{ backgroundColor: 'var(--bg-app)' }">
+        <div class="flex w-full flex-col items-stretch gap-3">
+          <div class="flex items-center justify-between gap-3 rounded-lg px-3 py-2" :style="{ backgroundColor: 'var(--bg-app)' }">
             <span class="text-xs font-medium text-app-secondary">Bet Amount</span>
             <span class="text-sm font-bold text-app-primary">${{ betAmount.toLocaleString() }}</span>
           </div>
           <button
             type="button"
-            class="rounded-lg bg-brand-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-md transition-all duration-150 hover:bg-brand-blue-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            class="btn-glossy-blue w-full px-6 py-2.5 text-sm font-bold disabled:cursor-not-allowed"
             :disabled="spinning"
             @click="spin"
           >
