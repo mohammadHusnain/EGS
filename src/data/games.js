@@ -15,10 +15,11 @@ import neon888 from '@/assets/games/card_neon_888.png'
 import qgSlot from '@/assets/games/card_qg.png'
 import ftgSlot from '@/assets/games/card_ftg.png'
 import jili from '@/assets/games/card_jili.png'
-import bannerA from '@/assets/games/crop_banner_a.png'
-import bannerB from '@/assets/games/crop_banner_b.png'
 
-export { bannerA, bannerB }
+// NOTE: the hero banner image is no longer sourced from here. Every page
+// renders it through `HeroBanner.vue` (src/components/gaming/HeroBanner.vue),
+// which owns the single import of the banner asset. Swap the banner file by
+// editing that one component, not by adding banner imports/exports here.
 
 export const hotGames = [
   { id: 'super-ace', title: 'Super Ace', category: 'hot', badge: '', gradient: 'from-rose-600 via-red-700 to-amber-600', image: superAce, fit: 'contain' },
@@ -80,8 +81,58 @@ export const bottomNavB = [
   { id: 'me', label: 'Me', icon: 'user', route: '/game-providers' }
 ]
 
+// Bottom nav for the light "Categories" screen (now Roulette) — Home, Deposit, Promo, Task, Me.
+export const bottomNavC = [
+  { id: 'home', label: 'Home', icon: 'home', route: '/game-shows' },
+  { id: 'deposit', label: 'Deposit', icon: 'wallet', route: '/roulette' },
+  { id: 'promo', label: 'Promo', icon: 'gift', route: '/roulette' },
+  { id: 'task', label: 'Task', icon: 'task', route: '/roulette' },
+  { id: 'me', label: 'Me', icon: 'user', route: '/roulette' }
+]
+
+// Bottom nav for the light "Home Final" screen (now Game Shows) — Home, Promo, raised Deposit circle, Task, Me.
+export const bottomNavD = [
+  { id: 'home', label: 'Home', icon: 'home', route: '/game-shows' },
+  { id: 'promo', label: 'Promo', icon: 'gift', route: '/roulette' },
+  { id: 'deposit', label: 'Deposit', icon: 'wallet', route: '/roulette', emphasized: true },
+  { id: 'task', label: 'Task', icon: 'task', route: '/roulette' },
+  { id: 'me', label: 'Me', icon: 'user', route: '/roulette' }
+]
+
 export const quickActions = [
   { id: 'withdrawal', label: 'Withdrawal', icon: 'withdraw' },
   { id: 'transfer', label: 'Transfer', icon: 'transfer' },
   { id: 'language', label: 'Language', icon: 'language' }
+]
+
+// Quick action row for the light "Home Final" screen.
+export const quickActionsLight = [
+  { id: 'download', label: 'APP Download', icon: 'download' },
+  { id: 'cs', label: 'CS', icon: 'headset' },
+  { id: 'more', label: 'More', icon: 'more' }
+]
+
+// Jackpot amounts shown on the "Home Dark Classic" jackpot section badges.
+export const jackpotAmounts = ['₱75,218.60', '₱48,930.15', '₱132,604.90']
+
+// 2-column provider/game tile grid for the light "Categories" screen.
+// Reuses the real qg/ftg/jili card art already in the provider set, then
+// fills out FC/PP/PG slots with styled badge tiles (no fabricated logos).
+export const lightProviderTiles = [
+  { id: 'qg', title: 'QG SLOT', image: qgSlot, ribbon: '' },
+  { id: 'ftg', title: 'FTG SLOT', image: ftgSlot, ribbon: '' },
+  { id: 'jili', title: 'JILI', image: jili, ribbon: '' },
+  { id: 'fc', title: 'FC SLOTS', image: '', ribbon: '' },
+  { id: 'pp', title: 'PP SLOTS', image: '', ribbon: 'HOT' },
+  { id: 'pg', title: 'PG SLOTS', image: '', ribbon: 'N' },
+  { id: 'fish-2', title: 'Fishing', image: legendMermaid, ribbon: '' },
+  { id: 'ace-2', title: 'Arcade', image: superAce, ribbon: '' }
+]
+
+// "Hot" grid for the light "Home Final" screen — 3 real cards + 2 reused-art
+// fillers so the 5-tile layout with big first row matches the screenshot.
+export const homeLightHotGames = [
+  ...hotGames,
+  { id: 'chinese-n', title: 'Chinese N...', category: 'hot', badge: '', gradient: 'from-red-600 via-rose-700 to-amber-700', image: dailyFishing, fit: 'contain' },
+  { id: 'lucky-for', title: 'Lucky For...', category: 'hot', badge: '', gradient: 'from-emerald-600 via-teal-700 to-cyan-800', image: legendMermaid, fit: 'contain' }
 ]

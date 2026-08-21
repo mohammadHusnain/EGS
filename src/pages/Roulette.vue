@@ -1,207 +1,153 @@
 <template>
-  <DashboardLayout title="American Roulette">
-    <div class="mx-auto max-w-[1400px] space-y-4 p-4 sm:p-6 lg:p-8">
-      <BackButton label="Back to Casino" to="/casino-lobby" />
+  <DashboardLayout title="Roulette">
+    <!-- Forced light theme (CSS vars pinned locally so shared components like
+         BottomNavigation stay light even if the app-wide theme is dark). -->
+    <div class="flex min-h-full w-full flex-1 flex-col bg-slate-100 text-slate-900" :style="forcedLightVars">
+      <div class="mx-auto w-full max-w-[1600px] flex-1 px-4 pt-4 pb-28 sm:px-6 sm:pt-6 lg:px-8">
+        <BackButton class="mt-0" label="Back to Casino" to="/casino-lobby" />
 
-      <!-- Header bar: title, live badge, settings, fun/real toggle -->
-      <div class="themed-surface flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 shadow-sm" :style="{ borderColor: 'var(--border-color)' }">
-        <div class="flex items-center gap-2">
-          <button
-            type="button"
-            class="grid h-8 w-8 place-items-center rounded-lg text-app-primary transition hover:bg-black/5"
-            aria-label="Back"
-            @click="$router.back()"
-          >
-            <AppIcon name="chevronRight" :size="16" class="rotate-180" />
+        <!-- Top bar: blue Register link / logo / blue Login pill -->
+        <div class="mt-4 flex items-center justify-between rounded-xl bg-white px-3 py-2.5 shadow-sm">
+          <button type="button" class="text-xs font-bold text-brand-blue-600 hover:underline">Register</button>
+          <LightLogo />
+          <button type="button" class="rounded-full bg-brand-blue-600 px-4 py-1.5 text-xs font-bold text-white shadow hover:bg-brand-blue-700">
+            Login
           </button>
-          <h2 class="text-sm font-bold text-app-primary sm:text-base">American Roulette</h2>
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-600/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-            <span class="h-1.5 w-1.5 rounded-full bg-white live-pulse" />
-            Live
-          </span>
         </div>
 
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-1.5 text-app-secondary">
-            <button type="button" class="grid h-8 w-8 place-items-center rounded-lg transition hover:bg-black/5 hover:text-app-primary" title="Settings">
-              <RouletteIcon name="gear" :size="16" />
-            </button>
-            <button type="button" class="grid h-8 w-8 place-items-center rounded-lg transition hover:bg-black/5 hover:text-app-primary" title="Switch table">
-              <RouletteIcon name="shuffle" :size="16" />
-            </button>
+        <div class="pt-3">
+          <HeroBanner :image="bannerB" alt="Roulette promotion" title="Roulette, Every Variant" subtitle="European, American, and speed tables — place your bets." />
+        </div>
+
+        <!-- Speaker / mute bar -->
+        <div class="mt-3 flex items-center gap-2 rounded-lg bg-slate-200/70 px-3.5 py-2 text-slate-500">
+          <AppIcon name="sound" :size="15" />
+          <p class="truncate text-xs">Welcome to Master System</p>
+        </div>
+
+        <!-- Welcome / auth prompt -->
+        <div class="mt-3 flex items-center justify-between rounded-xl bg-white px-4 py-3 shadow-sm">
+          <p class="text-sm font-semibold text-slate-700">Welcome, Please log in!</p>
+          <div class="flex shrink-0 gap-2">
+            <button type="button" class="rounded-full bg-brand-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow">Login</button>
+            <button type="button" class="rounded-full bg-slate-200 px-3.5 py-1.5 text-xs font-bold text-slate-600">Register</button>
+          </div>
+        </div>
+
+        <!-- Two-pane: light icon sidebar + tile grid, widened on desktop -->
+        <div class="mt-3 flex gap-3 lg:gap-6">
+          <nav class="flex w-16 shrink-0 flex-col items-center gap-1 rounded-xl bg-white py-2 shadow-sm lg:w-24">
             <button
+              v-for="item in sidebarCategories"
+              :key="item.id"
               type="button"
-              class="grid h-8 w-8 place-items-center rounded-lg transition hover:bg-black/5 hover:text-app-primary"
-              :class="{ 'text-brand-gold-500': favorited }"
-              title="Favorite"
-              @click="favorited = !favorited"
+              class="flex w-full flex-col items-center gap-1 rounded-lg px-1 py-2.5 text-[9px] font-semibold transition lg:text-[10px]"
+              :class="activeCategory === item.id ? 'bg-brand-blue-50 text-brand-blue-700' : 'text-slate-500 hover:bg-slate-50'"
+              @click="activeCategory = item.id"
             >
-              <RouletteIcon name="star" :size="16" />
+              <AppIcon :name="item.icon" :size="17" />
+              <span class="truncate leading-tight">{{ item.label }}</span>
             </button>
-            <button type="button" class="grid h-8 w-8 place-items-center rounded-lg transition hover:bg-black/5 hover:text-app-primary" title="Fullscreen">
-              <RouletteIcon name="fullscreen" :size="16" />
-            </button>
-          </div>
+          </nav>
 
-          <div class="flex items-center gap-2 text-xs font-medium text-app-secondary">
-            <span :class="{ 'text-app-primary': !realPlay }">Fun Play</span>
-            <button
-              type="button"
-              role="switch"
-              :aria-checked="realPlay"
-              class="relative h-5 w-9 shrink-0 rounded-full transition-colors"
-              :class="realPlay ? 'bg-brand-gold-500' : 'bg-black/20'"
-              @click="realPlay = !realPlay"
-            >
-              <span
-                class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform"
-                :class="realPlay ? 'translate-x-4' : 'translate-x-0.5'"
-              />
-            </button>
-            <span :class="{ 'text-app-primary': realPlay }">Real Play</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Game info + live table -->
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[0.75fr_1.7fr]">
-        <!-- Game info card -->
-        <div class="glass-card flex w-full flex-shrink-0 flex-col gap-3 p-3">
-          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-xl">
-            <img :src="gameThumb" alt="American Roulette table" class="absolute inset-0 h-full w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-blue-500/85" />
-            <div class="absolute inset-x-0 bottom-0 space-y-0.5 p-3 text-white">
-              <p class="font-serif text-lg font-semibold drop-shadow">American Roulette</p>
-              <p class="text-[10px] tracking-wide text-white/80">PRAGMATIC PLAY</p>
-            </div>
-          </div>
-          <p class="font-serif text-sm font-semibold text-app-primary">American Roulette</p>
-          <div class="space-y-1.5 rounded-lg p-2.5 text-[11px]" :style="{ background: 'var(--bg-app)' }">
-            <div class="flex items-center justify-between">
-              <span class="text-app-secondary">Bets</span>
-              <span class="font-medium text-app-primary">8,092,694</span>
-            </div>
-            <div class="h-px w-full" :style="{ background: 'var(--border-color)' }" />
-            <div class="flex items-center justify-between">
-              <span class="text-app-secondary">RTP</span>
-              <span class="font-medium text-app-primary">96.50%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Live table -->
-        <div class="glass-card flex min-w-0 w-full flex-col gap-3 p-3 sm:p-4">
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-card">
-            <img :src="tableLive" alt="Live American Roulette table" class="absolute inset-0 h-full w-full object-cover" />
-            <div class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur-sm">
-              <span class="h-1.5 w-1.5 rounded-full bg-rose-500 live-pulse" />
-              Live Dealer
-            </div>
-            <div class="absolute right-3 top-3 flex gap-1.5">
-              <span
-                v-for="n in lastResults"
-                :key="n.value + n.color"
-                class="grid h-6 w-6 place-items-center rounded-full text-[10px] font-bold text-white shadow"
-                :class="n.color === 'red' ? 'bg-rose-600' : n.color === 'black' ? 'bg-neutral-800' : 'bg-emerald-600'"
-              >
-                {{ n.value }}
-              </span>
-            </div>
-          </div>
-
-          <RouletteBettingGrid :chip-on="lastPlaced" @place="onPlace" />
-
-          <!-- Chip selector -->
-          <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-2.5" :style="{ borderColor: 'var(--border-color)' }">
-            <div class="flex items-center gap-2">
+          <main class="min-w-0 flex-1 space-y-6 pb-4">
+            <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               <button
-                v-for="chip in chips"
-                :key="chip.value"
+                v-for="tile in lightProviderTiles"
+                :key="tile.id"
                 type="button"
-                class="chip grid h-9 w-9 place-items-center rounded-full border-2 border-white/70 text-[10px] font-bold text-white shadow-md transition hover:-translate-y-1 active:translate-y-0 active:scale-95 sm:h-10 sm:w-10 sm:text-xs"
-                :style="{ background: chip.color }"
-                :class="{ 'ring-2 ring-offset-1 ring-brand-gold-400': selectedChip === chip.value }"
-                @click="selectedChip = chip.value"
+                class="group relative flex h-32 flex-col overflow-hidden rounded-xl bg-white text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:h-36"
+                @click="openTile(tile)"
               >
-                {{ chip.label }}
+                <span v-if="tile.ribbon" class="absolute right-0 top-0 z-10 rounded-bl-lg bg-red-500 px-1.5 py-0.5 text-[8px] font-bold text-white">{{ tile.ribbon }}</span>
+                <img v-if="tile.image" :src="tile.image" :alt="tile.title" class="h-full w-full object-contain p-3 transition-transform duration-300 group-hover:scale-105" />
+                <span v-else class="flex h-full w-full items-center justify-center bg-brand-blue-50 text-brand-blue-600">
+                  <AppIcon name="slots" :size="22" />
+                </span>
+                <p class="absolute inset-x-0 bottom-0 truncate border-t border-white/40 bg-white/70 px-2 py-1 text-[10px] font-bold text-slate-800 backdrop-blur-sm lg:text-xs">{{ tile.title }}</p>
               </button>
             </div>
-            <div class="flex items-center gap-2">
-              <button type="button" class="rounded-lg px-3 py-1.5 text-xs font-semibold text-app-secondary transition hover:bg-black/5" @click="clearBets">
-                Clear
-              </button>
-              <button type="button" class="btn-glossy-blue px-4 py-1.5 text-xs font-semibold">
-                Bet ${{ selectedChip }}
-              </button>
+
+            <!-- Wide-screen filler: reuse the full game catalog so the desktop
+                 grid isn't just a stretched sidebar on large screens. -->
+            <div>
+              <LightSectionHeading title="More Games" icon="fire" />
+              <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <button
+                  v-for="game in allGames"
+                  :key="`more-${game.id}`"
+                  type="button"
+                  class="group relative flex h-32 flex-col overflow-hidden rounded-xl bg-white text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:h-36"
+                  @click="openTile(game)"
+                >
+                  <img v-if="game.image" :src="game.image" :alt="game.title" class="h-full w-full object-contain p-3 transition-transform duration-300 group-hover:scale-105" />
+                  <p class="absolute inset-x-0 bottom-0 truncate border-t border-white/40 bg-white/70 px-2 py-1 text-[10px] font-bold text-slate-800 backdrop-blur-sm lg:text-xs">{{ game.title }}</p>
+                </button>
+              </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
 
-      <!-- Wins table -->
-      <RouletteWinsTable />
+      <BottomNavigation :items="bottomNavC" v-model:active="activeBottom" />
     </div>
   </DashboardLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { h, ref } from 'vue'
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
 import BackButton from '@/components/common/BackButton.vue'
 import AppIcon from '@/components/common/AppIcon.vue'
-import RouletteIcon from '@/components/casino-screens/RouletteIcon.vue'
-import RouletteBettingGrid from '@/components/casino-screens/RouletteBettingGrid.vue'
-import RouletteWinsTable from '@/components/casino-screens/RouletteWinsTable.vue'
-import tableLive from '@/assets/casino/roulette/table-live.png'
-import gameThumb from '@/assets/casino/roulette/game-thumb.png'
+import HeroBanner from '@/components/gaming/HeroBanner.vue'
+import bannerB from '@/assets/games/hero_roulette.png'
+import BottomNavigation from '@/components/navigation/BottomNavigation.vue'
+import egsLogo from '@/assets/brand/egs-logo.png'
+import { sidebarCategories, lightProviderTiles, allGames, bottomNavC } from '@/data/games'
 
-const favorited = ref(false)
-const realPlay = ref(false)
-const selectedChip = ref(25)
-const lastPlaced = ref('')
+const activeCategory = ref('slots')
+const activeBottom = ref('home')
 
-const chips = [
-  { value: 1, label: '$1', color: '#e5e5e5' },
-  { value: 5, label: '$5', color: '#b8244a' },
-  { value: 25, label: '$25', color: '#1642c4' },
-  { value: 100, label: '$100', color: '#0a1a4d' },
-  { value: 500, label: '$500', color: '#e6a800' }
-]
-
-const lastResults = [
-  { value: 17, color: 'black' },
-  { value: 32, color: 'red' },
-  { value: 0, color: 'green' }
-]
-
-function onPlace(key) {
-  lastPlaced.value = key
-  // Mock interaction only — no real gaming/wagering logic in this build.
-  console.info('Placed bet (mock):', key, 'chip', selectedChip.value)
+const forcedLightVars = {
+  '--bg-app': '#f4f7ff',
+  '--bg-surface': '#ffffff',
+  '--bg-header': '#1642c4',
+  '--bg-nav': '#0f2570',
+  '--text-primary': '#0a1a4d',
+  '--text-secondary': '#5b6b9a',
+  '--border-color': '#e3e9fb',
+  '--card-shadow': '0 4px 14px rgba(10, 26, 77, 0.1)'
 }
 
-function clearBets() {
-  lastPlaced.value = ''
+// Logo mark styled for the light screens (dark wordmark instead of white).
+const LightLogo = {
+  setup() {
+    return () =>
+      h('div', { class: 'flex select-none items-center gap-2' }, [
+        h('div', { class: 'flex h-8 w-8 items-center justify-center rounded-lg bg-brand-blue-50 shadow-sm sm:h-9 sm:w-9' }, [
+          h('img', { src: egsLogo, alt: 'EGS logo', class: 'h-5 w-5 object-contain sm:h-6 sm:w-6' })
+        ]),
+        h('div', { class: 'leading-none' }, [
+          h('p', { class: 'text-sm font-extrabold tracking-wide text-slate-900 sm:text-base' }, 'EGS'),
+          h('p', { class: '-mt-0.5 text-[10px] font-semibold tracking-[0.2em] text-brand-blue-600 sm:text-xs' }, 'GAMING')
+        ])
+      ])
+  }
+}
+
+// Section heading styled for the light screens.
+const LightSectionHeading = {
+  props: { title: String, icon: String },
+  setup(props) {
+    return () =>
+      h('div', { class: 'mb-3 flex items-center gap-2' }, [
+        h('span', { class: 'text-red-500' }, [h(AppIcon, { name: props.icon, size: 18 })]),
+        h('h2', { class: 'text-sm font-bold uppercase tracking-wide text-slate-800 sm:text-base' }, props.title)
+      ])
+  }
+}
+
+function openTile(tile) {
+  console.info('Opening provider tile (mock):', tile.title)
 }
 </script>
-
-<style scoped>
-.live-pulse {
-  animation: live-pulse 1.6s ease-in-out infinite;
-}
-@keyframes live-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.45;
-    transform: scale(1.4);
-  }
-}
-
-.chip {
-  background-image: repeating-conic-gradient(rgba(255, 255, 255, 0.25) 0deg 10deg, transparent 10deg 20deg);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-</style>

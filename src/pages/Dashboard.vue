@@ -1,6 +1,12 @@
 <template>
   <DashboardLayout title="Dashboard">
     <div class="mx-auto max-w-[1600px] space-y-6 p-4 sm:p-6 lg:p-8">
+      <!-- Hero banner -->
+      <HeroBanner :image="bannerA" alt="Casino dashboard promotion" title="Your Casino Command Center" subtitle="Track wins, explore new releases, and jump back into your favorite tables." />
+
+      <!-- Quick actions -->
+      <QuickActions :actions="quickActions" class="sm:max-w-md" />
+
       <!-- Stat cards -->
       <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <div
@@ -122,7 +128,10 @@
 <script setup>
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
 import AppIcon from '@/components/common/AppIcon.vue'
-import { hotGames, jackpotGames, slotGames, providers } from '@/data/games'
+import HeroBanner from '@/components/gaming/HeroBanner.vue'
+import bannerA from '@/assets/games/hero_roulette.png'
+import QuickActions from '@/components/gaming/QuickActions.vue'
+import { hotGames, jackpotGames, slotGames, providers, quickActions } from '@/data/games'
 
 const stats = [
   { label: 'Active Players', value: '12,480', change: '+4.2%', icon: 'user' },

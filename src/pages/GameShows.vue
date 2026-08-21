@@ -1,236 +1,202 @@
 <template>
   <DashboardLayout title="Game Shows">
-    <div class="mx-auto max-w-[1400px] space-y-4 p-4 sm:p-6 lg:p-8">
-      <BackButton label="Back to Game Shows" to="/dashboard" />
+    <!-- Forced light theme (CSS vars pinned locally, see Roulette.vue). -->
+    <div class="flex min-h-full w-full flex-1 flex-col bg-slate-100 text-slate-900" :style="forcedLightVars">
+      <div class="mx-auto w-full max-w-[1600px] flex-1 px-4 pt-4 pb-28 sm:px-6 sm:pt-6 lg:px-8">
+        <BackButton class="mt-0" label="Back to Game Shows" to="/dashboard" />
 
-      <!-- Header -->
-      <div class="themed-surface flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3" :style="{ borderColor: 'var(--border-color)' }">
-        <div class="flex items-center gap-2.5">
-          <button
-            type="button"
-            class="flex h-8 w-8 items-center justify-center rounded-lg text-app-secondary transition hover:-translate-x-0.5 hover:bg-black/5"
-            aria-label="Go back"
-            @click="$router.back()"
-          >
-            <AppIcon name="chevronRight" :size="16" class="rotate-180" />
-          </button>
-          <div>
-            <h2 class="text-base font-bold text-app-primary sm:text-lg">Ice Fishing</h2>
-            <p class="text-[11px] font-medium uppercase tracking-wide text-app-secondary">Live Game Show &middot; Pragmatic Play</p>
-          </div>
-          <span class="ml-1 inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-500">
-            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
-            Live
-          </span>
+        <!-- Top bar: plain text links, no pills -->
+        <div class="mt-4 flex items-center justify-between px-1 py-2.5">
+          <button type="button" class="text-sm font-bold text-brand-blue-600 hover:underline">Register</button>
+          <LightLogo />
+          <button type="button" class="text-sm font-bold text-brand-blue-600 hover:underline">Login</button>
         </div>
 
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 rounded-lg px-2 py-1" :style="{ backgroundColor: 'var(--bg-app)' }">
-            <span class="text-xs font-medium text-app-secondary">Fun Play</span>
-            <button
-              type="button"
-              class="relative h-5 w-9 shrink-0 rounded-full transition-colors"
-              :style="{ backgroundColor: realPlay ? 'var(--accent-gold)' : 'var(--border-color)' }"
-              aria-label="Toggle real play"
-              @click="realPlay = !realPlay"
-            >
-              <span
-                class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200"
-                :class="realPlay ? 'translate-x-4' : 'translate-x-0.5'"
-              />
-            </button>
-            <span class="text-xs font-medium text-app-secondary">Real Play</span>
-          </div>
+        <!-- Bell / chat thin bar -->
+        <div class="flex items-center justify-between rounded-lg bg-white px-3.5 py-2 shadow-sm">
+          <AppIcon name="bell" :size="17" class="text-slate-500" />
+          <AppIcon name="chat" :size="17" class="text-slate-500" />
+        </div>
 
-          <button v-for="tool in headerTools" :key="tool.name" type="button" class="flex h-8 w-8 items-center justify-center rounded-lg text-app-secondary transition hover:scale-105 hover:bg-black/5 active:scale-95" :aria-label="tool.label" :title="tool.label">
-            <GameShowsIcon :name="tool.name" :size="16" />
-          </button>
+        <div class="pt-3">
+          <HeroBanner :image="bannerA" alt="Game shows promotion" title="Interactive Game Shows" subtitle="Live hosts, big prizes, and real-time play with the crowd." />
+        </div>
+
+        <!-- Quick action tiles -->
+        <div class="grid grid-cols-3 gap-2.5 pt-3 sm:max-w-md">
+          <div
+            v-for="action in quickActionsLight"
+            :key="action.id"
+            class="flex flex-col items-center gap-1.5 rounded-xl bg-white py-3 text-slate-700 shadow-sm"
+          >
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue-600">
+              <AppIcon :name="action.icon" :size="18" />
+            </span>
+            <span class="text-[11px] font-semibold">{{ action.label }}</span>
+          </div>
+        </div>
+
+        <div class="pt-5 lg:flex lg:items-start lg:gap-6">
+          <main class="min-w-0 flex-1">
+            <!-- Hot section -->
+            <div class="mb-3 flex items-center gap-2">
+              <span class="text-red-500"><AppIcon name="fire" :size="18" /></span>
+              <h2 class="text-sm font-bold uppercase tracking-wide text-slate-800">Hot</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 xl:grid-cols-4">
+              <button
+                type="button"
+                class="group relative col-span-2 flex h-32 overflow-hidden rounded-2xl bg-gradient-to-br text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:h-36"
+                :class="homeLightHotGames[0].gradient"
+                @click="openGame(homeLightHotGames[0])"
+              >
+                <img :src="homeLightHotGames[0].image" :alt="homeLightHotGames[0].title" class="absolute inset-0 h-full w-full object-contain p-3 transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-x-0 bottom-0 border-t border-white/30 bg-white/15 px-3 py-1.5 backdrop-blur-sm">
+                  <p class="truncate text-xs font-bold text-white drop-shadow">{{ homeLightHotGames[0].title }}</p>
+                </div>
+              </button>
+              <button
+                v-for="game in homeLightHotGames.slice(1)"
+                :key="game.id"
+                type="button"
+                class="group relative flex h-32 overflow-hidden rounded-2xl bg-gradient-to-br text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:h-36"
+                :class="game.gradient"
+                @click="openGame(game)"
+              >
+                <img :src="game.image" :alt="game.title" class="absolute inset-0 h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" />
+                <div class="absolute inset-x-0 bottom-0 border-t border-white/30 bg-white/15 px-2 py-1 backdrop-blur-sm">
+                  <p class="truncate text-xs font-bold text-white drop-shadow">{{ game.title }}</p>
+                </div>
+              </button>
+            </div>
+            <div class="mt-3 flex justify-center gap-1.5">
+              <span v-for="n in 3" :key="n" class="h-1.5 rounded-full bg-slate-300 transition-all" :class="n === 1 ? 'w-4 bg-brand-blue-600' : 'w-1.5'" />
+            </div>
+
+            <!-- Half-width promo cards -->
+            <div class="grid grid-cols-2 gap-2.5 pt-4 sm:grid-cols-4">
+              <PromoTile title="Slots" icon="slots" gradient="from-amber-400 via-orange-500 to-red-600" />
+              <PromoTile title="LiveCasino" icon="live" gradient="from-rose-500 via-pink-600 to-fuchsia-700" />
+              <PromoTile title="Play For Fun" icon="controller" gradient="from-sky-500 via-blue-600 to-indigo-700" />
+              <PromoTile title="Fish" icon="fish" gradient="from-teal-500 via-cyan-600 to-blue-700" />
+            </div>
+
+            <!-- Wide-screen filler: reuse the full game catalog beneath the
+                 promo tiles so the desktop layout uses the extra width. -->
+            <div class="pt-6">
+              <div class="mb-3 flex items-center gap-2">
+                <span class="text-brand-blue-600"><AppIcon name="controller" :size="18" /></span>
+                <h2 class="text-sm font-bold uppercase tracking-wide text-slate-800">More Games</h2>
+              </div>
+              <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 xl:grid-cols-4">
+                <button
+                  v-for="game in allGames"
+                  :key="`more-${game.id}`"
+                  type="button"
+                  class="group relative flex h-32 overflow-hidden rounded-2xl bg-gradient-to-br text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:h-36"
+                  :class="game.gradient"
+                  @click="openGame(game)"
+                >
+                  <img :src="game.image" :alt="game.title" class="absolute inset-0 h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" />
+                  <div class="absolute inset-x-0 bottom-0 border-t border-white/30 bg-white/15 px-2 py-1 backdrop-blur-sm">
+                    <p class="truncate text-xs font-bold text-white drop-shadow">{{ game.title }}</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </main>
+
+          <!-- Desktop-only right rail: live providers panel to fill extra width. -->
+          <aside class="mt-6 hidden shrink-0 space-y-4 lg:mt-0 lg:block lg:w-72">
+            <div class="rounded-2xl bg-white p-4 shadow-sm">
+              <div class="mb-3 flex items-center gap-2">
+                <span class="text-brand-blue-600"><AppIcon name="crown" :size="18" /></span>
+                <h2 class="text-sm font-bold uppercase tracking-wide text-slate-800">Top Providers</h2>
+              </div>
+              <div class="space-y-2.5">
+                <button
+                  v-for="provider in providers"
+                  :key="provider.id"
+                  type="button"
+                  class="group relative flex h-16 w-full items-center overflow-hidden rounded-xl text-left shadow transition hover:-translate-y-0.5 hover:shadow-lg"
+                  @click="openGame(provider)"
+                >
+                  <div class="absolute inset-0 bg-gradient-to-br" :class="provider.gradient" />
+                  <img v-if="provider.image" :src="provider.image" :alt="provider.title" class="relative z-10 ml-auto h-full object-contain py-1.5 pr-2" />
+                  <div class="absolute inset-y-0 left-0 z-10 flex w-3/5 flex-col justify-center px-3">
+                    <p class="text-[9px] font-bold uppercase tracking-widest text-white/70">{{ provider.name }}</p>
+                    <p class="truncate text-xs font-black text-white drop-shadow">{{ provider.title }}</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
 
-      <!-- Game info + live feed -->
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[0.8fr_1.6fr]">
-        <!-- Left game info card -->
-        <div class="glass-card flex flex-col gap-3 p-3">
-          <div class="relative flex aspect-[3/4] w-full flex-col items-center justify-end overflow-hidden rounded-lg">
-            <img :src="cardImage" alt="Ice Fishing game card" class="absolute inset-0 h-full w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue-950/85 via-brand-blue-900/10 to-transparent" />
-            <div class="relative z-10 mb-3 px-2 text-center text-white">
-              <p class="font-serif text-xl font-semibold drop-shadow">Ice Fishing</p>
-              <p class="text-[10px] font-medium uppercase tracking-wide text-white/80">Pragmatic Play</p>
-            </div>
-          </div>
-          <p class="font-serif text-sm font-semibold text-app-primary">Ice Fishing</p>
-          <div class="flex flex-col gap-1.5 rounded-lg p-2 text-xs" :style="{ backgroundColor: 'var(--bg-app)' }">
-            <div class="flex items-center justify-between">
-              <span class="text-app-secondary">Bets</span>
-              <span class="font-semibold text-app-primary">{{ betsCount }}</span>
-            </div>
-            <div class="h-px w-full" :style="{ backgroundColor: 'var(--border-color)' }" />
-            <div class="flex items-center justify-between">
-              <span class="text-app-secondary">RTP</span>
-              <span class="font-semibold text-app-primary">96.50%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Live feed -->
-        <div class="glass-card relative overflow-hidden p-0" :style="{ backgroundColor: 'var(--bg-nav)' }">
-          <img :src="liveFeedImage" alt="Live dealer feed" class="h-full max-h-[280px] w-full object-cover opacity-90" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-          <div class="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-black/40 py-1 pl-1 pr-3 backdrop-blur-sm">
-            <img :src="avatarImage" alt="Host" class="h-7 w-7 rounded-full border-2 object-cover" :style="{ borderColor: 'var(--accent-gold)' }" />
-            <div class="leading-tight">
-              <p class="text-xs font-semibold text-white">Host Amelia</p>
-              <p class="text-[10px] text-white/70">Studio 3</p>
-            </div>
-          </div>
-
-          <div class="absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-white backdrop-blur-sm">
-            <GameShowsIcon name="history" :size="14" />
-            <span class="text-xs font-semibold">Round #{{ roundNumber }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wheel + betting panel -->
-      <div class="glass-card grid grid-cols-1 items-center gap-6 p-4 sm:p-6 lg:grid-cols-3">
-        <!-- Wheel -->
-        <div class="flex flex-col items-center gap-3 lg:items-start">
-          <PrizeWheel :segments="wheelSegments" :spinning="spinning" :target-rotation="targetRotation" :size="260" class="my-2" />
-
-          <transition name="fade-slide">
-            <div v-if="lastResult" class="rounded-lg bg-brand-gold-500/15 px-4 py-1.5 text-sm font-bold text-brand-gold-600">
-              Landed on {{ lastResult }} &mdash; nice one!
-            </div>
-          </transition>
-        </div>
-
-        <!-- Chip selector -->
-        <div class="flex flex-wrap items-center justify-center gap-2">
-          <button
-            v-for="chip in chips"
-            :key="chip"
-            type="button"
-            class="flex h-11 w-11 items-center justify-center rounded-full border-2 text-[11px] font-bold shadow-sm transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-90"
-            :class="betAmount === chip ? 'text-white' : 'text-app-primary'"
-            :style="{
-              borderColor: 'var(--accent-gold)',
-              backgroundColor: betAmount === chip ? 'var(--accent-gold)' : 'var(--bg-app)'
-            }"
-            @click="betAmount = chip"
-          >
-            ${{ chip }}
-          </button>
-        </div>
-
-        <!-- Bet + spin controls -->
-        <div class="flex w-full flex-col items-stretch gap-3">
-          <div class="flex items-center justify-between gap-3 rounded-lg px-3 py-2" :style="{ backgroundColor: 'var(--bg-app)' }">
-            <span class="text-xs font-medium text-app-secondary">Bet Amount</span>
-            <span class="text-sm font-bold text-app-primary">${{ betAmount.toLocaleString() }}</span>
-          </div>
-          <button
-            type="button"
-            class="btn-glossy-blue w-full px-6 py-2.5 text-sm font-bold disabled:cursor-not-allowed"
-            :disabled="spinning"
-            @click="spin"
-          >
-            {{ spinning ? 'Spinning…' : 'Spin' }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Wins table -->
-      <WinsTable :big-wins="bigWins" :lucky-wins="luckyWins" />
+      <BottomNavigation :items="bottomNavD" v-model:active="activeBottom" />
     </div>
   </DashboardLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { h, ref } from 'vue'
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
 import BackButton from '@/components/common/BackButton.vue'
 import AppIcon from '@/components/common/AppIcon.vue'
-import GameShowsIcon from '@/components/casino-screens/GameShowsIcon.vue'
-import PrizeWheel from '@/components/casino-screens/PrizeWheel.vue'
-import WinsTable from '@/components/casino-screens/WinsTable.vue'
-import cardImage from '@/assets/casino/game-shows/card-ice-fishing.png'
-import liveFeedImage from '@/assets/casino/game-shows/live-feed.png'
-import avatarImage from '@/assets/casino/game-shows/avatar.png'
+import HeroBanner from '@/components/gaming/HeroBanner.vue'
+import bannerA from '@/assets/games/hero_ice_fishing.png'
+import BottomNavigation from '@/components/navigation/BottomNavigation.vue'
+import egsLogo from '@/assets/brand/egs-logo.png'
+import { quickActionsLight, homeLightHotGames, allGames, providers, bottomNavD } from '@/data/games'
 
-const realPlay = ref(false)
-const betsCount = ref('8,092,694')
-const roundNumber = ref(4821)
+const activeBottom = ref('home')
 
-const headerTools = [
-  { name: 'settings', label: 'Settings' },
-  { name: 'refresh', label: 'Round history' },
-  { name: 'star', label: 'Add to favorites' }
-]
-
-// Wheel — alternating brand colors, weighted toward lower multipliers like a
-// real money wheel, with one rare high-value gold segment.
-const wheelSegments = [
-  { label: '1x', color: '#1642c4', text: '#ffffff' },
-  { label: '2x', color: '#ffd24d', text: '#0a1a4d' },
-  { label: '1x', color: '#245bea', text: '#ffffff' },
-  { label: '5x', color: '#ffc107', text: '#0a1a4d' },
-  { label: '1x', color: '#1642c4', text: '#ffffff' },
-  { label: '2x', color: '#ffd24d', text: '#0a1a4d' },
-  { label: '1x', color: '#245bea', text: '#ffffff' },
-  { label: '10x', color: '#e6a800', text: '#0a1a4d' },
-  { label: '1x', color: '#1642c4', text: '#ffffff' },
-  { label: '2x', color: '#ffd24d', text: '#0a1a4d' },
-  { label: '1x', color: '#245bea', text: '#ffffff' },
-  { label: '20x', color: '#b88400', text: '#ffffff' }
-]
-
-const chips = [10, 50, 100, 500]
-const betAmount = ref(50)
-
-const spinning = ref(false)
-const targetRotation = ref(0)
-const lastResult = ref('')
-let currentRotation = 0
-
-function spin() {
-  if (spinning.value) return
-  spinning.value = true
-  lastResult.value = ''
-
-  const segCount = wheelSegments.length
-  const segAngle = 360 / segCount
-  const winningIndex = Math.floor(Math.random() * segCount)
-  // Spin several full turns then settle so the winning segment sits under
-  // the top pointer.
-  const extraTurns = 6 * 360
-  const settleAngle = 360 - winningIndex * segAngle
-  currentRotation += extraTurns + settleAngle
-  targetRotation.value = currentRotation
-
-  window.setTimeout(() => {
-    spinning.value = false
-    lastResult.value = wheelSegments[winningIndex].label
-  }, 3200)
+const forcedLightVars = {
+  '--bg-app': '#f4f7ff',
+  '--bg-surface': '#ffffff',
+  '--bg-header': '#1642c4',
+  '--bg-nav': '#0f2570',
+  '--text-primary': '#0a1a4d',
+  '--text-secondary': '#5b6b9a',
+  '--border-color': '#e3e9fb',
+  '--card-shadow': '0 4px 14px rgba(10, 26, 77, 0.1)'
 }
 
-// Mock leaderboard data
-const avatarColors = ['#245bea', '#ffc107', '#7a5af8', '#22c55e', '#ef4444', '#0ea5e9']
-function makeRows(seedMultiplier) {
-  const names = ['Diamond', 'Nova', 'Kestrel', 'Orion', 'Blaze', 'Vega']
-  return names.map((user, i) => ({
-    id: `${seedMultiplier}-${i}`,
-    user,
-    avatarColor: avatarColors[i % avatarColors.length],
-    bet: `$${(20000 * (i + 1)).toLocaleString()}`,
-    multiplier: `${(seedMultiplier + i * 1.7).toFixed(2)}x`,
-    payout: `$${(164224 - i * 12000).toLocaleString()}.00`,
-    date: `Nov ${10 - i}, 4:26 AM`
-  }))
+const LightLogo = {
+  setup() {
+    return () =>
+      h('div', { class: 'flex select-none items-center gap-2' }, [
+        h('div', { class: 'flex h-8 w-8 items-center justify-center rounded-lg bg-brand-blue-50 shadow-sm sm:h-9 sm:w-9' }, [
+          h('img', { src: egsLogo, alt: 'EGS logo', class: 'h-5 w-5 object-contain sm:h-6 sm:w-6' })
+        ]),
+        h('div', { class: 'leading-none' }, [
+          h('p', { class: 'text-sm font-extrabold tracking-wide text-slate-900 sm:text-base' }, 'EGS'),
+          h('p', { class: '-mt-0.5 text-[10px] font-semibold tracking-[0.2em] text-brand-blue-600 sm:text-xs' }, 'GAMING')
+        ])
+      ])
+  }
 }
 
-const bigWins = makeRows(8.21)
-const luckyWins = makeRows(2.15)
+// No real character art for these placeholder promo tiles (Slots /
+// LiveCasino / Play For Fun / Fish) — styled gradient + icon card instead of
+// a fabricated image, per the "no invented provider art" constraint.
+const PromoTile = {
+  props: { title: String, icon: String, gradient: String },
+  setup(props) {
+    return () =>
+      h(
+        'div',
+        { class: `group relative flex h-28 items-end overflow-hidden rounded-2xl bg-gradient-to-br p-3 shadow-sm ${props.gradient}` },
+        [
+          h(AppIcon, { name: props.icon, size: 34, class: 'absolute right-3 top-3 text-white/25' }),
+          h('p', { class: 'text-sm font-bold text-white drop-shadow' }, props.title)
+        ]
+      )
+  }
+}
+
+function openGame(game) {
+  console.info('Launching game (mock):', game.title)
+}
 </script>

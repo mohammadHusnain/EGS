@@ -3,6 +3,8 @@
     <div class="mx-auto max-w-[1600px] space-y-4 p-4 sm:p-6 lg:p-8">
       <BackButton />
 
+      <HeroBanner :image="bannerB" alt="Sportsbook promotion" title="Bet On Every Match" subtitle="Live odds across football, basketball, tennis, and more." />
+
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr] lg:items-start lg:gap-6">
         <!-- Category sidebar -->
         <aside class="themed-surface rounded-xl border p-3 shadow-sm lg:sticky lg:top-4" :style="{ borderColor: 'var(--border-color)' }">
@@ -173,6 +175,8 @@ import { computed, ref } from 'vue'
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
 import BackButton from '@/components/common/BackButton.vue'
 import SportsbookIcon from '@/components/casino-screens/SportsbookIcon.vue'
+import HeroBanner from '@/components/gaming/HeroBanner.vue'
+import bannerB from '@/assets/games/hero_sweet_rush.png'
 
 const categories = [
   { key: 'boxing', label: 'Boxing', icon: 'boxing', count: 8 },

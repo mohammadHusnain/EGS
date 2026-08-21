@@ -21,7 +21,7 @@
       >
         {{ game.badge }}
       </span>
-      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-4">
+      <div v-if="showTitle" class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-4">
         <p class="truncate text-xs font-bold text-white drop-shadow sm:text-sm">{{ game.title }}</p>
       </div>
       <span class="absolute bottom-1.5 right-1.5 rounded-full bg-white/90 p-1.5 opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100">
@@ -33,7 +33,8 @@
 
 <script setup>
 defineProps({
-  game: { type: Object, required: true }
+  game: { type: Object, required: true },
+  showTitle: { type: Boolean, default: true }
 })
 defineEmits(['play'])
 </script>

@@ -3,6 +3,8 @@
     <div class="mx-auto max-w-[1600px] space-y-5 p-4 sm:p-6 lg:p-8">
       <BackButton />
 
+      <HeroBanner :image="bannerA" alt="Rewards promotion" title="Earn As You Play" subtitle="Level up your rank and unlock exclusive bonuses and prizes." />
+
       <!-- Page header -->
       <div class="flex flex-col gap-1">
         <div class="flex items-center gap-2">
@@ -118,6 +120,8 @@ import AppIcon from '@/components/common/AppIcon.vue'
 import RewardsIcon from '@/components/casino-screens/RewardsIcon.vue'
 import RewardChipCard from '@/components/casino-screens/RewardChipCard.vue'
 import RankBadge from '@/components/casino-screens/RankBadge.vue'
+import HeroBanner from '@/components/gaming/HeroBanner.vue'
+import bannerA from '@/assets/games/hero_roulette.png'
 import badgeBronze from '@/assets/casino/rewards/badge-bronze.svg'
 
 // ---- Mock data only — no backend wiring in this build ----

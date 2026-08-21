@@ -1,7 +1,7 @@
 <template>
   <section class="mb-7">
     <SectionHeading :title="title" :icon="icon" />
-    <GameGrid :games="games" @play="$emit('play', $event)" />
+    <GameGrid :games="games" :show-title="showTitle" @play="$emit('play', $event)" />
   </section>
 </template>
 
@@ -12,7 +12,8 @@ import GameGrid from './GameGrid.vue'
 defineProps({
   title: { type: String, required: true },
   icon: { type: String, default: 'fire' },
-  games: { type: Array, required: true }
+  games: { type: Array, required: true },
+  showTitle: { type: Boolean, default: true }
 })
 defineEmits(['play'])
 </script>
